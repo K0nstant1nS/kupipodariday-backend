@@ -5,14 +5,14 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { Length, IsUrl, IsInt } from 'class-validator';
+import { Length, IsUrl, IsInt, IsString, IsNumber } from 'class-validator';
 import { DefaultEntity } from 'src/defalut-entity.entity';
-import { configureDigitsAfterDot } from 'src/utils/funcs';
 import { User } from 'src/users/entities/user.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
 
 export class Wish extends DefaultEntity {
   @Column()
+  @IsString()
   @Length(1, 250)
   name: string;
 
@@ -24,10 +24,12 @@ export class Wish extends DefaultEntity {
   @IsUrl()
   image: string;
 
-  @Column() // Добавить округление до 2 знаков после запятой
+  @Column({ scale: 2 })
+  @IsNumber()
   price: number;
 
-  @Column()
+  @Column({ scale: 2 })
+  @IsNumber()
   raised: number;
 
   @JoinColumn()
@@ -35,24 +37,15 @@ export class Wish extends DefaultEntity {
   owner: User;
 
   @Column()
+  @IsString()
   @Length(1, 1024)
   description: string;
 
   @JoinColumn()
-  @OneToMany(() => Offer, (offer) => offer) // добавить поле для записи
+  @OneToMany(() => Offer, (offer) => offer.item) // добавить поле для записи
   offers: Offer[];
 
   @Column()
   @IsInt()
   copied: number;
-
-  @BeforeInsert()
-  configureNumber() {
-    if (this.price) {
-      this.price = configureDigitsAfterDot(this.price, 2);
-    }
-    if (this.raised) {
-      this.raised = configureDigitsAfterDot(this.raised, 2);
-    }
-  }
 }
