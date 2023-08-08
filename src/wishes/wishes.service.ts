@@ -10,21 +10,21 @@ export class WishesService {
   constructor(
     @InjectRepository(Wish) private readonly wishRepository: Repository<Wish>,
   ) {}
-  create(createWishDto: CreateWishDto) {
+  async create(createWishDto: CreateWishDto): Promise<Wish> {
     const wish = this.wishRepository.create(createWishDto);
-    return this.wishRepository.insert(wish);
+    return (await this.wishRepository.insert(wish)).raw;
   }
 
-  findOneById(id: number) {
+  findOneById(id: number): Promise<Wish> {
     return this.wishRepository.findOneBy({ id });
   }
 
-  update(id: number, updateWishDto: UpdateWishDto) {
-    return this.wishRepository.update(id, updateWishDto);
+  async update(id: number, updateWishDto: UpdateWishDto): Promise<Wish> {
+    return (await this.wishRepository.update(id, updateWishDto)).raw;
   }
 
-  remove(id: number) {
-    return this.wishRepository.delete({ id });
+  async remove(id: number): Promise<Wish> {
+    return (await this.wishRepository.delete({ id })).raw;
   }
 
   /*async postCopy(id: number) {

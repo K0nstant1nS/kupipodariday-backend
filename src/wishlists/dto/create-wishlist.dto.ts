@@ -1,1 +1,12 @@
-export class CreateWishlistDto {}
+import { IsString, IsUrl, IsNumber } from 'class-validator';
+
+export class CreateWishlistDto {
+  @IsString()
+  name: string;
+
+  @IsUrl()
+  image: string;
+
+  @IsNumber({}, { each: true })
+  itemsId: number[];
+}

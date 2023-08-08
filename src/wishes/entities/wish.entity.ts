@@ -4,12 +4,14 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  Entity,
 } from 'typeorm';
 import { Length, IsUrl, IsInt, IsString, IsNumber } from 'class-validator';
 import { DefaultEntity } from 'src/defalut-entity.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
 
+@Entity('wishes')
 export class Wish extends DefaultEntity {
   @Column()
   @IsString()
@@ -33,7 +35,7 @@ export class Wish extends DefaultEntity {
   raised: number;
 
   @JoinColumn()
-  @ManyToOne(() => User, (user) => user.wishes)
+  @ManyToOne(() => User, (user) => user.id)
   owner: User;
 
   @Column()

@@ -1,9 +1,10 @@
-import { Column, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { IsNumber, IsBoolean } from 'class-validator';
 import { DefaultEntity } from 'src/defalut-entity.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
 
+@Entity('offers')
 export class Offer extends DefaultEntity {
   @JoinColumn()
   @ManyToOne(() => User, (user) => user.offers)

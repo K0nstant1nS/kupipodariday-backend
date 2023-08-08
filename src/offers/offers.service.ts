@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateOfferDto } from './dto/create-offer.dto';
-import { UpdateOfferDto } from './dto/update-offer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Offer } from './entities/offer.entity';
 import { Repository } from 'typeorm';
@@ -11,9 +10,10 @@ export class OffersService {
     @InjectRepository(Offer)
     private readonly offerRepository: Repository<Offer>,
   ) {}
-  create(createOfferDto: CreateOfferDto): Promise<Offer> {
+  async create(createOfferDto: CreateOfferDto): Promise<Offer> {
     const offer = this.offerRepository.create(createOfferDto);
-    return this.offerRepository.save(offer);
+    const { raw } = await this.offerRepository.insert(offer);
+    return raw;
   }
 
   findAll(): Promise<Offer[]> {

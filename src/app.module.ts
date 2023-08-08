@@ -10,6 +10,7 @@ import { Wish } from './wishes/entities/wish.entity';
 import { Wishlist } from './wishlists/entities/wishlist.entity';
 import { Offer } from './offers/entities/offer.entity';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -19,9 +20,14 @@ import { AuthModule } from './auth/auth.module';
       port: 5432,
       username: 'student',
       password: 'student',
-      database: 'kupipodariday',
+      database: 'nest_project',
       entities: [User, Wish, Wishlist, Offer],
       synchronize: true,
+      autoLoadEntities: true,
+    }),
+    ConfigModule.forRoot({
+      envFilePath: ['.env'],
+      isGlobal: true,
     }),
     UsersModule,
     WishesModule,
