@@ -1,4 +1,4 @@
-import { IsNumber, Min, IsBoolean } from 'class-validator';
+import { IsNumber, Min, IsBoolean, IsOptional } from 'class-validator';
 
 export class CreateOfferDto {
   @IsNumber()
@@ -6,6 +6,7 @@ export class CreateOfferDto {
   amount: number;
 
   @IsBoolean()
+  @IsOptional()
   hidden: boolean;
 
   @IsNumber()

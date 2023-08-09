@@ -3,16 +3,24 @@ import { CreateOfferDto } from './dto/create-offer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Offer } from './entities/offer.entity';
 import { Repository } from 'typeorm';
+import { WishesService } from 'src/wishes/wishes.service';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class OffersService {
   constructor(
     @InjectRepository(Offer)
     private readonly offerRepository: Repository<Offer>,
+    private readonly wishesService: WishesService,
   ) {}
-  async create(createOfferDto: CreateOfferDto): Promise<Offer> {
-    const offer = this.offerRepository.create(createOfferDto);
-    const { raw } = await this.offerRepository.insert(offer);
+  async create(createOfferDto: CreateOfferDto, user: User): Promise<Offer> {
+    const { itemId, ...offerData } = createOfferDto;
+    const wish = await this.wishesService.findOneById(itemId);
+    const { raw } = await this.offerRepository.insert({
+      ...offerData,
+      user,
+      item: wish,
+    });
     return raw;
   }
 

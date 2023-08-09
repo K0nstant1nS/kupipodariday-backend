@@ -6,32 +6,50 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtGuard } from 'src/auth/guards/jwt.guard';
 
+@UseGuards(JwtGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @Get('me')
+  getMe(@Req() req) {
+    const { id } = req.user;
+    return this.usersService.findOneById(id);
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @Get('me/wishes')
+  getWishes(@Req() req) {
+    const { username } = req.user;
+    return this.usersService.getUserWishes(username);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOneById(+id);
+  @Get(':username')
+  getUserByName(@Param('username') username) {
+    return this.usersService.findOneByUsername(username);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @Get(':username/wishes')
+  getUserWishes(@Param('username') username) {
+    return this.usersService.getUserWishes(username);
+  }
+
+  @Post('find')
+  findUser(@Body() body) {
+    return this.usersService.findOneByQuery(body.query);
+  }
+
+  @Patch('me')
+  patchUser(@Req() req, @Body() body: UpdateUserDto) {
+    const { id } = req.user;
+    console.log(body);
+    return this.usersService.update(id, body);
   }
 }

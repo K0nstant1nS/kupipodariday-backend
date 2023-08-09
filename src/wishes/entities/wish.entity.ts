@@ -6,7 +6,14 @@ import {
   OneToMany,
   Entity,
 } from 'typeorm';
-import { Length, IsUrl, IsInt, IsString, IsNumber } from 'class-validator';
+import {
+  Length,
+  IsUrl,
+  IsInt,
+  IsString,
+  IsNumber,
+  IsOptional,
+} from 'class-validator';
 import { DefaultEntity } from 'src/defalut-entity.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
@@ -30,8 +37,8 @@ export class Wish extends DefaultEntity {
   @IsNumber()
   price: number;
 
-  @Column({ scale: 2 })
-  @IsNumber()
+  @Column({ scale: 2, default: null })
+  @IsOptional()
   raised: number;
 
   @JoinColumn()
@@ -47,7 +54,7 @@ export class Wish extends DefaultEntity {
   @OneToMany(() => Offer, (offer) => offer.item) // добавить поле для записи
   offers: Offer[];
 
-  @Column()
+  @Column({ default: 0 })
   @IsInt()
   copied: number;
 }
