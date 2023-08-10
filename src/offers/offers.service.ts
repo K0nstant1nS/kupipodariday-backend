@@ -57,17 +57,6 @@ export class OffersService {
     } finally {
       await queryRunner.release();
     }
-    // Пока оставил, удалю если вариант с queryRunner уместен.
-    /* await this.wishesService.update(itemId, {
-      raised: wish.raised + createOfferDto.amount,
-    });
-    const updatedWish = await this.wishesService.findOneById(itemId);
-    const { raw } = await this.offerRepository.insert({
-      ...offerData,
-      user,
-      item: updatedWish,
-    });
-    return raw; */
   }
 
   findAll(): Promise<Offer[]> {

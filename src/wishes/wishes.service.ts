@@ -101,21 +101,5 @@ export class WishesService {
     } finally {
       await queryRunner.release();
     }
-    /* const original = await this.wishRepository.findOneBy({ id });  // Пока оставил данный коммент, если
-    await this.wishRepository.update(id, {                            // queryRunner - излишння функциональность
-      ...original,                                                    // Снесу его и раскомменчу данное решение
-      copied: original.copied + 1,
-    });
-    const { name, link, image, price, description } = original;
-    const copiedWish = await this.wishRepository.create({
-      name,
-      link,
-      image,
-      price,
-      description,
-      owner: user,
-    });
-    const insertedWish = this.wishRepository.save(copiedWish);
-    return insertedWish; */
   }
 }

@@ -31,8 +31,7 @@ export class AuthController {
   @UseInterceptors(TransformInterceptor)
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) {
-    const password = await hashPassword(createUserDto.password, hashRounds);
-    const user = await this.usersService.create({ ...createUserDto, password });
+    const user = await this.usersService.create(createUserDto);
 
     return this.authService.auth(user);
   }

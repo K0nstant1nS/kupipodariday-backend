@@ -11,6 +11,7 @@ import { User } from './entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { hash } from 'bcrypt';
 import { hashRounds } from 'src/utils/constants';
+import { hashPassword } from 'src/utils/hash';
 
 @Injectable()
 export class UsersService {
@@ -18,6 +19,8 @@ export class UsersService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
   async create(createUserDto: CreateUserDto): Promise<User> {
+    const password = await hashPassword(createUserDto.password, hashRounds);
+    createUserDto = { ...createUserDto, password };
     try {
       const user = this.userRepository.create(createUserDto);
       const { raw } = await this.userRepository.insert(user);
