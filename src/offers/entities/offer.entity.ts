@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { IsNumber, IsBoolean } from 'class-validator';
-import { DefaultEntity } from 'src/defalut-entity.entity';
+import { DefaultEntity } from 'src/utils/defalut-entity.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
 

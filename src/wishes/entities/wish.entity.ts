@@ -14,7 +14,7 @@ import {
   IsNumber,
   IsOptional,
 } from 'class-validator';
-import { DefaultEntity } from 'src/defalut-entity.entity';
+import { DefaultEntity } from 'src/utils/defalut-entity.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
 

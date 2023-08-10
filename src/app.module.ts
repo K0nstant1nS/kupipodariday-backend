@@ -11,7 +11,7 @@ import { Wishlist } from './wishlists/entities/wishlist.entity';
 import { Offer } from './offers/entities/offer.entity';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import config from './config';
+import config from './utils/config';
 
 const rootConfig = config();
 
