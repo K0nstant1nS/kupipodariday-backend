@@ -14,7 +14,6 @@ import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
 import { DefaultEntity } from '../../defalut-entity.entity';
 import { Exclude } from 'class-transformer';
 
-// Почему-то не могу завставить работать Length/MinLength/Maxlength внутри Entity.
 @Entity('users')
 export class User extends DefaultEntity {
   @Column({ unique: true })

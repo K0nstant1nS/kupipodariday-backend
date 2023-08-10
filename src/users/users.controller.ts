@@ -5,11 +5,9 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   Req,
   UseGuards,
   UseInterceptors,
-  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';

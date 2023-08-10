@@ -2,17 +2,20 @@ import {
   Injectable,
   ConflictException,
   BadRequestException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Offer } from './entities/offer.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { WishesService } from 'src/wishes/wishes.service';
 import { User } from 'src/users/entities/user.entity';
+import { Wish } from 'src/wishes/entities/wish.entity';
 
 @Injectable()
 export class OffersService {
   constructor(
+    private readonly dataSource: DataSource,
     @InjectRepository(Offer)
     private readonly offerRepository: Repository<Offer>,
     private readonly wishesService: WishesService,
@@ -31,8 +34,31 @@ export class OffersService {
         } руб`,
       );
     }
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    await this.wishesService.update(itemId, {
+    try {
+      await queryRunner.manager.update(Wish, itemId, {
+        raised: wish.raised + createOfferDto.amount,
+      });
+      const updatedWish = await queryRunner.manager.findOneBy(Wish, {
+        id: itemId,
+      });
+      const savedOffer = await queryRunner.manager.save(Offer, {
+        ...offerData,
+        user,
+        item: updatedWish,
+      });
+      await queryRunner.commitTransaction();
+      return savedOffer;
+    } catch (e) {
+      throw new InternalServerErrorException('Ошибка при проведении операции');
+    } finally {
+      await queryRunner.release();
+    }
+    // Пока оставил, удалю если вариант с queryRunner уместен.
+    /* await this.wishesService.update(itemId, {
       raised: wish.raised + createOfferDto.amount,
     });
     const updatedWish = await this.wishesService.findOneById(itemId);
@@ -41,7 +67,7 @@ export class OffersService {
       user,
       item: updatedWish,
     });
-    return raw;
+    return raw; */
   }
 
   findAll(): Promise<Offer[]> {
