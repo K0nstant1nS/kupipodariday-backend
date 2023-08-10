@@ -8,17 +8,20 @@ import {
   Delete,
   Req,
   UseGuards,
+  UseInterceptors,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
+import { TransformInterceptor } from 'src/utils/transfrom-interceptor';
 
 @UseGuards(JwtGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseInterceptors(TransformInterceptor)
   @Get('me')
   getMe(@Req() req) {
     const { id } = req.user;
@@ -31,21 +34,24 @@ export class UsersController {
     return this.usersService.getUserWishes(username);
   }
 
+  @UseInterceptors(TransformInterceptor)
   @Get(':username')
-  getUserByName(@Param('username') username) {
+  async getUserByName(@Param('username') username) {
     return this.usersService.findOneByUsername(username);
   }
 
   @Get(':username/wishes')
-  getUserWishes(@Param('username') username) {
+  async getUserWishes(@Param('username') username) {
     return this.usersService.getUserWishes(username);
   }
 
+  @UseInterceptors(TransformInterceptor)
   @Post('find')
   findUser(@Body() body) {
     return this.usersService.findOneByQuery(body.query);
   }
 
+  @UseInterceptors(TransformInterceptor)
   @Patch('me')
   patchUser(@Req() req, @Body() body: UpdateUserDto) {
     const { id } = req.user;

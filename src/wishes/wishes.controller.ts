@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   Req,
+  ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import { WishesService } from './wishes.service';
 import { CreateWishDto } from './dto/create-wish.dto';
@@ -25,7 +27,7 @@ export class WishesController {
 
   @Get('top')
   getTop() {
-    return this.wishesService.getTopWishes(20);
+    return this.wishesService.getTopWishes(20); // В задании написано про 20 подарков, в чеклисте про 10
   }
 
   @UseGuards(JwtGuard)
@@ -42,13 +44,28 @@ export class WishesController {
 
   @UseGuards(JwtGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWishDto: UpdateWishDto) {
+  async update(
+    @Req() req,
+    @Param('id') id: string,
+    @Body() updateWishDto: UpdateWishDto,
+  ) {
+    const { owner } = await this.wishesService.findOneById(+id);
+    if (owner.id !== req.user.id) {
+      throw new ForbiddenException('Нет прав для изменения данной карточки');
+    }
+    if (updateWishDto.raised) {
+      throw new BadRequestException(`Нельзя изменять кол-во собранных средств`);
+    }
     return this.wishesService.update(+id, updateWishDto);
   }
 
   @UseGuards(JwtGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Req() req, @Param('id') id: string) {
+    const { owner } = await this.wishesService.findOneById(+id);
+    if (owner.id !== req.user.id) {
+      throw new ForbiddenException('Нет прав для удаления данной карточки');
+    }
     return this.wishesService.remove(+id);
   }
 

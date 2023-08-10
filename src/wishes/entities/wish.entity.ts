@@ -37,12 +37,12 @@ export class Wish extends DefaultEntity {
   @IsNumber()
   price: number;
 
-  @Column({ scale: 2, default: null })
+  @Column({ scale: 2, default: 0 })
   @IsOptional()
   raised: number;
 
   @JoinColumn()
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.wishes)
   owner: User;
 
   @Column()
@@ -51,7 +51,7 @@ export class Wish extends DefaultEntity {
   description: string;
 
   @JoinColumn()
-  @OneToMany(() => Offer, (offer) => offer.item) // добавить поле для записи
+  @OneToMany(() => Offer, (offer) => offer.item)
   offers: Offer[];
 
   @Column({ default: 0 })

@@ -1,4 +1,4 @@
-import { Entity, Column, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, JoinColumn, OneToMany, Unique } from 'typeorm';
 import {
   Length,
   IsUrl,
@@ -6,12 +6,15 @@ import {
   IsString,
   IsEmpty,
   IsOptional,
+  MinLength,
 } from 'class-validator';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
 import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
 import { DefaultEntity } from '../../defalut-entity.entity';
+import { Exclude } from 'class-transformer';
 
+// Почему-то не могу завставить работать Length/MinLength/Maxlength внутри Entity.
 @Entity('users')
 export class User extends DefaultEntity {
   @Column({ unique: true })
@@ -20,6 +23,7 @@ export class User extends DefaultEntity {
   username: string;
 
   @Column({ default: 'Пока ничего не рассказал о себе' })
+  @IsString()
   @Length(2, 200)
   about: string;
 
@@ -27,23 +31,25 @@ export class User extends DefaultEntity {
   @IsUrl()
   avatar: string;
 
+  @Exclude()
   @Column({ unique: true })
   @IsEmail()
   email: string;
 
+  @Exclude()
   @Column()
   @IsString()
   password: string;
 
-  //@JoinColumn()
+  @JoinColumn()
   @OneToMany(() => Wish, (wish) => wish.owner)
   wishes: Wish[];
 
-  //@JoinColumn()
+  @JoinColumn()
   @OneToMany(() => Offer, (offer) => offer.id)
   offers: Offer[];
 
-  //@JoinColumn()
+  @JoinColumn()
   @OneToMany(() => Wishlist, (wishlist) => wishlist.owner)
   wishlists: Wishlist[];
 }

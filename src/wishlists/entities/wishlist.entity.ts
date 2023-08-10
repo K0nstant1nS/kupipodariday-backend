@@ -1,5 +1,18 @@
-import { Column, JoinColumn, ManyToOne, ManyToMany, Entity } from 'typeorm';
-import { Length, MaxLength, IsUrl, IsString } from 'class-validator';
+import {
+  Column,
+  JoinColumn,
+  ManyToOne,
+  ManyToMany,
+  Entity,
+  JoinTable,
+} from 'typeorm';
+import {
+  Length,
+  MaxLength,
+  IsUrl,
+  IsString,
+  IsOptional,
+} from 'class-validator';
 import { DefaultEntity } from 'src/defalut-entity.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
@@ -11,7 +24,7 @@ export class Wishlist extends DefaultEntity {
   @Length(1, 250)
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   @MaxLength(250)
   description: string;
@@ -20,10 +33,12 @@ export class Wishlist extends DefaultEntity {
   @IsUrl()
   image: string;
 
-  @JoinColumn()
+  @JoinTable()
   @ManyToMany(() => Wish)
+  @IsOptional()
   items: Wish[];
 
+  @JoinColumn()
   @ManyToOne(() => User, (user) => user.wishlists)
   owner: User;
 }

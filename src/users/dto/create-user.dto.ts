@@ -9,19 +9,21 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto {
-  @Length(1, 64)
+  @Length(2, 30, { message: 'Имя должно содержать от 2 до 30 символов' })
   username: string;
 
   @IsOptional()
   @IsString()
-  @Length(0, 200)
+  @Length(2, 200, {
+    message: `Поле 'О себе' должно содержать от 2 до 200 символов`,
+  })
   about: string;
 
   @IsOptional()
-  @IsUrl()
+  @IsUrl({}, { message: 'Проверьте корректность ссылки на аватар' })
   avatar: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: 'Использован некорректный email' })
   email: string;
 
   @IsString()

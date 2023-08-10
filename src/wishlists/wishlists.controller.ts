@@ -6,18 +6,23 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { WishlistsService } from './wishlists.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
+import { JwtGuard } from 'src/auth/guards/jwt.guard';
 
-@Controller('wishlists')
+@UseGuards(JwtGuard)
+@Controller('wishlistlists')
 export class WishlistsController {
   constructor(private readonly wishlistsService: WishlistsService) {}
 
   @Post()
-  create(@Body() createWishlistDto: CreateWishlistDto) {
-    return this.wishlistsService.create(createWishlistDto);
+  create(@Req() req, @Body() createWishlistDto: CreateWishlistDto) {
+    return this.wishlistsService.create(createWishlistDto, req.user);
   }
 
   @Get()
@@ -31,15 +36,28 @@ export class WishlistsController {
   }
 
   @Patch(':id')
-  update(
+  async update(
+    @Req() req,
     @Param('id') id: string,
     @Body() updateWishlistDto: UpdateWishlistDto,
   ) {
+    const { owner } = await this.wishlistsService.findOneById(+id);
+    if (owner.id !== req.user.id) {
+      throw new ForbiddenException(
+        'Нет прав для изменения данного списка желаемого',
+      );
+    }
     return this.wishlistsService.update(+id, updateWishlistDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Req() req, @Param('id') id: string) {
+    const { owner } = await this.wishlistsService.findOneById(+id);
+    if (owner.id !== req.user.id) {
+      throw new ForbiddenException(
+        'Нет прав для удаления данного списка желаемого',
+      );
+    }
     return this.wishlistsService.remove(+id);
   }
 }

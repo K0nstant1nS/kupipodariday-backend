@@ -4,7 +4,12 @@ export class CreateWishlistDto {
   @IsString()
   name: string;
 
-  @IsUrl()
+  @IsUrl(
+    {},
+    {
+      message: 'Передена невалидная ссылка на изображение',
+    },
+  )
   image: string;
 
   @IsNumber({}, { each: true })

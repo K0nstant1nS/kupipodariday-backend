@@ -6,16 +6,14 @@ import { Wish } from 'src/wishes/entities/wish.entity';
 
 @Entity('offers')
 export class Offer extends DefaultEntity {
-  @JoinColumn()
   @ManyToOne(() => User, (user) => user.offers)
   user: User;
 
-  @JoinColumn()
   @ManyToOne(() => Wish, (wish) => wish.offers)
   item: Wish;
 
   @Column({ scale: 2 })
-  @IsNumber()
+  @IsNumber({})
   amount: number;
 
   @Column({ default: false })
