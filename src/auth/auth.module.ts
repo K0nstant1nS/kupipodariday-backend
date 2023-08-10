@@ -17,6 +17,7 @@ import { AuthController } from './auth.controller';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('jwtKey'),
+        signOptions: { expiresIn: '7d' },
       }),
       inject: [ConfigService],
     }),

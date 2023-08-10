@@ -55,7 +55,6 @@ export class UsersController {
   @Patch('me')
   patchUser(@Req() req, @Body() body: UpdateUserDto) {
     const { id } = req.user;
-    console.log(body);
     return this.usersService.update(id, body);
   }
 }

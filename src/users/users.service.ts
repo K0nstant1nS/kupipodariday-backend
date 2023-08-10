@@ -51,7 +51,6 @@ export class UsersService {
   }
 
   findOneByQuery(query: string): Promise<User[]> {
-    console.log(query);
     return this.userRepository.find({
       where: [{ email: query }, { username: query }],
     });

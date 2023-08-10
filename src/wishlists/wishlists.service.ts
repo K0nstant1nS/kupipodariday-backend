@@ -20,17 +20,14 @@ export class WishlistsService {
     user: User,
   ): Promise<Wishlist> {
     const { itemsId, ...createWishData } = createWishlistDto;
-    console.log(1);
     const items = itemsId.map((id) => {
       return { id } as unknown as Wish;
     });
-    console.log(2);
     const wishlist = this.wishlistService.create({
       ...createWishData,
       items,
       owner: user,
     });
-    console.log(3);
     return await this.wishlistService.save(wishlist);
   }
 
