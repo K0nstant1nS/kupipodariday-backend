@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { IsNumber, IsBoolean } from 'class-validator';
 import { DefaultEntity } from 'src/utils/defalut-entity.entity';
 import { User } from 'src/users/entities/user.entity';

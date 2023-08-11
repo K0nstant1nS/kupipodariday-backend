@@ -10,7 +10,6 @@ import {
 import { OffersService } from './offers.service';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
-import { WishesService } from 'src/wishes/wishes.service';
 
 @UseGuards(JwtGuard)
 @Controller('offers')

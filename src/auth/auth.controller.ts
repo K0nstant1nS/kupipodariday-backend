@@ -5,14 +5,11 @@ import {
   Req,
   Body,
   UseInterceptors,
-  ConflictException,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { hashPassword } from 'src/utils/hash';
-import { hashRounds } from 'src/utils/constants';
 import { TransformInterceptor } from 'src/utils/transfrom-interceptor';
 
 @Controller('/')

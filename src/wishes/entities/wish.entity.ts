@@ -1,11 +1,4 @@
-import {
-  Column,
-  BeforeInsert,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  Entity,
-} from 'typeorm';
+import { Column, JoinColumn, ManyToOne, OneToMany, Entity } from 'typeorm';
 import {
   Length,
   IsUrl,

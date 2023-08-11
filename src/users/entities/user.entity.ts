@@ -1,13 +1,5 @@
-import { Entity, Column, JoinColumn, OneToMany, Unique } from 'typeorm';
-import {
-  Length,
-  IsUrl,
-  IsEmail,
-  IsString,
-  IsEmpty,
-  IsOptional,
-  MinLength,
-} from 'class-validator';
+import { Entity, Column, JoinColumn, OneToMany } from 'typeorm';
+import { Length, IsUrl, IsEmail, IsString } from 'class-validator';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
 import { Wishlist } from 'src/wishlists/entities/wishlist.entity';

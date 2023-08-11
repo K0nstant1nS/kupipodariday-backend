@@ -6,7 +6,6 @@ import { Offer } from './entities/offer.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { WishesService } from 'src/wishes/wishes.service';
-import { WishesModule } from 'src/wishes/wishes.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Offer, User, Wish])],
